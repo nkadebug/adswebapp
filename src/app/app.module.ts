@@ -10,6 +10,14 @@ import { AngularFireModule } from '@angular/fire';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFireDatabaseModule } from '@angular/fire/database';
 import { LoginComponent } from './pages/login/login.component';
+import { HomeComponent } from './pages/home/home.component';
+import { ProfileComponent } from './pages/profile/profile.component';
+import { FindPersonComponent } from './components/find-person/find-person.component';
+import { SpinnerComponent } from './components/spinner/spinner.component';
+import { ChatComponent } from './pages/chat/chat.component';
+import { P404Component } from './pages/p404/p404.component';
+import { ChatInputComponent } from './components/chat-input/chat-input.component';
+import { ChatMsgListComponent } from './components/chat-msg-list/chat-msg-list.component';
 
 
 
@@ -17,7 +25,15 @@ import { LoginComponent } from './pages/login/login.component';
 @NgModule({
   declarations: [
     AppComponent,
-    LoginComponent
+    LoginComponent,
+    HomeComponent,
+    ProfileComponent,
+    FindPersonComponent,
+    SpinnerComponent,
+    ChatComponent,
+    P404Component,
+    ChatInputComponent,
+    ChatMsgListComponent
   ],
   imports: [
     BrowserModule,

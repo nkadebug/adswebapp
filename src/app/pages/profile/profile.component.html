@@ -1,0 +1,13 @@
+<div *ngIf="user; else showLoginProgress">
+    <div class="d-flex align-items-center justify-content-center bg-dark" style="height:100vh;">
+        <div class="bg-light p-4 m-4">
+            <p>{{user.uid}}</p>
+            <button class="btn btn-info me-2" routerLink="/">Home</button>
+            <button class="btn btn-warning" (click)="auth.signOut();">Sign Out</button>
+        </div>
+    </div>
+</div>
+
+<ng-template #showLoginProgress>
+    <app-spinner status="Signing In ..."></app-spinner>
+</ng-template>

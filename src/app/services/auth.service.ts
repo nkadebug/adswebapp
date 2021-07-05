@@ -1,6 +1,7 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFireDatabase } from '@angular/fire/database';
+import { Router } from '@angular/router';
 import firebase from 'firebase/app';
 import { BehaviorSubject } from 'rxjs';
 
@@ -14,20 +15,28 @@ export class AuthService {
   defaultEmailDomain = `@${environment.firebaseConfig.authDomain}`;
   user = new BehaviorSubject<any | null>(null);
 
-
   constructor(
     private auth: AngularFireAuth,
-    private db: AngularFireDatabase
+    private db: AngularFireDatabase,
+    private router: Router
   ) {
     auth.authState.subscribe(user => {
+      console.log(user);
       this.user.next(user);
       this.updatePresence(user);
+      if (user) {
+        localStorage.setItem('uid', user.uid);
+        console.log(`Logged In : ${user.uid}`);
+      } else {
+        localStorage.removeItem('uid');
+        console.log('Logged Out');
+        this.router.navigate(['login']);
+      }
     });
   }
 
   formatId(id: string): string {
     let email = `${id}${this.defaultEmailDomain}`;
-    console.log({ id, email });
     return email;
   }
 
@@ -35,7 +44,7 @@ export class AuthService {
     this.auth.createUserWithEmailAndPassword(this.formatId(id), pw)
       .then((cred) => {
         console.log('Signed Up');
-        if(cred.user){
+        if (cred.user) {
           this.initUserData(cred.user);
         }
       })
@@ -71,11 +80,15 @@ export class AuthService {
     }
   }
 
-  initUserData(user:any){
+  initUserData(user: any) {
     this.db.object(`users/${user.uid}`).update({
-      uid:user.uid,
-      username:user.email.endsWith(this.defaultEmailDomain)?user.email.split('@')[0]:user.email
+      uid: user.uid,
+      username: this.getUsernameFromEmail(user)
     });
+  }
+
+  getUsernameFromEmail(user:any):string{
+    return user.email.endsWith(this.defaultEmailDomain) ? user.email.split('@')[0] : user.email;
   }
 
   // goOnline(){

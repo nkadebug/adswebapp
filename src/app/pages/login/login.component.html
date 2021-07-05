@@ -1,24 +1,22 @@
-<div *ngIf="auth.user |async as user">
-    <p>{{user.uid}}</p>
-    <button type="submit" class="btn btn-primary mb-3" (click)="signOut();">Sign Out</button>
+<div *ngIf="!(auth.user | async)" class="d-flex align-items-center justify-content-center bg-dark" style="height:100vh;">
+    <form [formGroup]=" loginForm" (ngSubmit)="onSubmit()" class="p-4 m-4 border rounded bg-light">
+        <div class="mb-3 row">
+            <label class="col-sm-4 col-form-label">Username</label>
+            <div class="col-sm-8">
+                <input type="text" class="form-control" formControlName="id">
+            </div>
+        </div>
+        <div class="mb-3 row">
+            <label class="col-sm-4 col-form-label">Password</label>
+            <div class="col-sm-8">
+                <input type="password" class="form-control" formControlName="pw">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-4"></div>
+            <div class="col-sm-8">
+                <button type="submit" class="btn btn-success">Sign In</button>
+            </div>
+        </div>
+    </form>
 </div>
-<form [formGroup]=" loginForm" (ngSubmit)="onSubmit()" class="p-2">
-    <div class="mb-3 row">
-        <label class="col-sm-2 col-form-label">Username</label>
-        <div class="col-sm-10">
-            <input type="text" class="form-control" formControlName="id">
-        </div>
-    </div>
-    <div class="mb-3 row">
-        <label class="col-sm-2 col-form-label">Password</label>
-        <div class="col-sm-10">
-            <input type="password" class="form-control" formControlName="pw">
-        </div>
-    </div>
-    <div class="mb-3 row">
-        <div class="col-sm-2"></div>
-        <div class="col-sm-10">
-            <button type="submit" class="btn btn-primary mb-3">Sign In</button>
-        </div>
-    </div>
-</form>

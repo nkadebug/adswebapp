@@ -1,0 +1,7 @@
+<div *ngIf="user; else showLoginProgress">
+    <p class="m-2">Welcome ... <a routerLink="/profile">{{user.displayName ? user.displayName : user.username}}</a></p>
+    <app-find-person></app-find-person>
+</div>
+<ng-template #showLoginProgress>
+    <app-spinner status="Signing In ..."></app-spinner>
+</ng-template>

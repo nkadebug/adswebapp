@@ -1,0 +1,12 @@
+<div *ngIf="user; else showLoginProgress">
+    <div class="my-5 p-2">
+        <app-chat-msg-list [uid]="user.uid" [pid]="person.uid"></app-chat-msg-list>
+    </div>
+    <div class="position-fixed bottom-0 bg-light p-2 w-100">
+        <app-chat-input [uid]="user.uid" [pid]="person.uid"></app-chat-input>
+    </div>
+</div>
+
+<ng-template #showLoginProgress>
+    <app-spinner status="Signing In ..."></app-spinner>
+</ng-template>

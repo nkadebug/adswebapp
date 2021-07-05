@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { AngularFireDatabase } from '@angular/fire/database';
 import { FormGroup, FormControl } from '@angular/forms';
 import { AuthService } from 'src/app/services/auth.service';
-import { pipe } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -19,25 +17,28 @@ export class LoginComponent implements OnInit {
 
   constructor(
     public auth: AuthService,
-    private db: AngularFireDatabase
+    private router: Router
   ) {
 
   }
 
   ngOnInit(): void {
-    
-    this.auth.user.subscribe(user=>{
-      if(user){
-        this.db.list('users', ref => ref.orderByChild('email').equalTo('nkadebug@adswebapp.firebaseapp.com')).valueChanges().subscribe(list => console.log(list));
+
+    this.auth.user.subscribe(user => {
+      if (user) {
+        if (sessionStorage.redirectAfterLogin) {
+          this.router.navigateByUrl(sessionStorage.redirectAfterLogin);
+          sessionStorage.removeItem('redirectAfterLogin');
+        } else {
+          this.router.navigate(['home']);
+        }
       }
     });
-  
-      
+
   }
 
   onSubmit() {
     let cred = this.loginForm.value;
-    console.log(cred);
     this.auth.signIn(cred.id, cred.pw);
   }
 

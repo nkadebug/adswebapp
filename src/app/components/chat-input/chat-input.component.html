@@ -1,0 +1,7 @@
+<form [formGroup]="chatInputForm" (submit)="onSubmit()">
+    <div class="input-group">
+        <input type="text" class="form-control" placeholder="Type here ..." aria-describedby="button-addon"
+            formControlName="msg">
+        <button class="btn btn-outline-secondary" type="submit" id="button-addon">Send</button>
+    </div>
+</form>
