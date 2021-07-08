@@ -24,7 +24,7 @@ export class ChatMsgListComponent implements OnInit {
 
   ngOnInit(): void {
     let chatId = [this.uid, this.pid].sort().join('/');
-    console.log(chatId);
+    //console.log({chatId});
     this.db.list(`chats/${chatId}`)
       .snapshotChanges(["child_added"])
       .subscribe(actions => {

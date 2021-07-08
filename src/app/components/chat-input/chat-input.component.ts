@@ -21,19 +21,20 @@ export class ChatInputComponent implements OnInit {
 
   ngOnInit(): void {
     this.chatId = [this.uid, this.pid].sort().join('/');
-    console.log(this.chatId);
+    //console.log(this.chatId);
+    this.db.database.ref(`chats/${this.chatId}/${this.uid}/typing`).onDisconnect().remove();
   }
 
   onSubmit() {
-    if (this.uid && this.pid) {
-      this.chatId = [this.uid, this.pid].sort().join('/');
-      this.db.list(`chats/${this.chatId}`).push(
-        { ts: Date.now(), ...this.chatInputForm.value, uid: this.uid });
-      this.chatInputForm.reset();
-      this.setTyping(false);
-    } else {
-      console.log(this.uid, this.pid);
-    }
+    //if (this.uid && this.pid) {
+    //this.chatId = [this.uid, this.pid].sort().join('/');
+    this.db.list(`chats/${this.chatId}`).push(
+      { ts: Date.now(), ...this.chatInputForm.value, uid: this.uid });
+    this.chatInputForm.reset();
+    this.setTyping(false);
+    // } else {
+    //   console.log(this.uid, this.pid);
+    // }
   }
 
   typing = false;

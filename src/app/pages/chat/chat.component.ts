@@ -44,7 +44,7 @@ export class ChatComponent implements OnInit {
           if (personCache) {
             
             this.person.uid = JSON.parse(personCache).uid;
-            console.log('from cahce', this.person.uid);
+            //console.log('from cahce', this.person.uid);
             this.connectChat();
 
           } else {
