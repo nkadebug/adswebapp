@@ -1,5 +1,12 @@
-<div *ngIf="user; else showLoginProgress">
-    <div class="my-5 p-2">
+<div *ngIf="showChatMsgList; else showLoginProgress">
+    <div class="position-fixed top-0 bg-dark text-light p-2 w-100">
+        <a routerLink="/profile" class="text-light me-2" style="float: right;">{{user.username}}</a>
+        <span class="mx-2">{{person.username}}</span>
+        <span class="badge rounded-pill"
+            [class]="person.online?'bg-success':'bg-secondary'">{{person.online?'Online':'Offline'}}</span>
+        <span *ngIf="person.typing" class="text-light ms-2" style="font-size: small;">typing...</span>
+    </div>
+    <div>
         <app-chat-msg-list [uid]="user.uid" [pid]="person.uid"></app-chat-msg-list>
     </div>
     <div class="position-fixed bottom-0 bg-light p-2 w-100">

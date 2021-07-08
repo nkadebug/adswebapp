@@ -1,21 +1,28 @@
-<div *ngIf="!(auth.user | async)" class="d-flex align-items-center justify-content-center bg-dark" style="height:100vh;">
+<div class="d-flex align-items-center justify-content-center bg-dark" style="height:100vh;">
+
     <form [formGroup]=" loginForm" (ngSubmit)="onSubmit()" class="p-4 m-4 border rounded bg-light">
+        <div *ngIf="alert" class="text-danger mb-3 text-center" style="max-width: 300px;">
+            {{alert}}
+        </div>
         <div class="mb-3 row">
             <label class="col-sm-4 col-form-label">Username</label>
             <div class="col-sm-8">
-                <input type="text" class="form-control" formControlName="id">
+                <div class="input-group">
+                    <input type="text" class="form-control" formControlName="id" minlength="6" maxlength="20">
+                    <!-- <span class="input-group-text" id="basic-addon2">@{{authDomain}}</span> -->
+                </div>
             </div>
         </div>
         <div class="mb-3 row">
             <label class="col-sm-4 col-form-label">Password</label>
             <div class="col-sm-8">
-                <input type="password" class="form-control" formControlName="pw">
+                <input type="password" class="form-control" formControlName="pw" minlength="6" maxlength="20">
             </div>
         </div>
         <div class="row">
             <div class="col-sm-4"></div>
             <div class="col-sm-8">
-                <button type="submit" class="btn btn-success">Sign In</button>
+                <button type="submit" class="btn btn-success">Sign {{showSignUp?'Up':'In'}}</button>
             </div>
         </div>
     </form>

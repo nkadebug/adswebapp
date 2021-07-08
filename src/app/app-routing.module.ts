@@ -19,7 +19,7 @@ const routes: Routes = [
     canActivate: [AuthGuardService]
   },
   {
-    path: 'chat',
+    path: 'c',
     canActivate: [AuthGuardService],
     children: [
       {
@@ -30,6 +30,10 @@ const routes: Routes = [
         path: '', component: FindPersonComponent
       }
     ]
+  },
+  {
+    path: '',
+    component: HomeComponent
   },
   {
     path: '**',

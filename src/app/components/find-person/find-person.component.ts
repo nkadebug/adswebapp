@@ -10,6 +10,8 @@ import { Router } from '@angular/router';
 })
 export class FindPersonComponent implements OnInit {
 
+  result = "";
+
   findPersonForm: FormGroup = new FormGroup({
     username: new FormControl(''),
   });
@@ -19,6 +21,11 @@ export class FindPersonComponent implements OnInit {
     private router: Router) { }
 
   ngOnInit(): void {
+    if (sessionStorage.usersearch) {
+      this.findPersonForm.setValue({ username: sessionStorage.usersearch });
+      sessionStorage.removeItem('usersearch');
+      this.onSubmit();
+    }
   }
 
 
@@ -26,15 +33,23 @@ export class FindPersonComponent implements OnInit {
 
     let username = this.findPersonForm.value.username;
 
-    if (username) {
-      console.log('Looking for :', username);
-      this.db.list('/users', ref => ref.orderByChild('username').equalTo(username)
-        .limitToFirst(1))
-        .snapshotChanges().subscribe(list => {
-          let uid = list[0].payload.key;
-          localStorage["person_" + uid] = JSON.stringify({ username, td:Date.now()});
-          this.router.navigate(["chat", uid]);
-        })
+    if (username && username) {
+      if (localStorage["person_" + username]) {
+        this.router.navigate(["c", username]);
+      } else {
+        this.db.list('/users', ref => ref.orderByChild('username').equalTo(username)
+          .limitToFirst(1))
+          .snapshotChanges().subscribe(list => {
+            if (list.length) {
+              let uid = list[0].payload.key;
+              localStorage["person_" + username] = JSON.stringify({ uid, td: Date.now() });
+              this.result = "Redirecting ...";
+              this.router.navigate(["c", username]);
+            } else {
+              this.result = "Username Not Found";
+            }
+          });
+      }
     }
   }
 

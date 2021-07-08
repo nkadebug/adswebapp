@@ -12,7 +12,9 @@ import { environment } from '../../environments/environment';
 })
 
 export class AuthService {
-  defaultEmailDomain = `@${environment.firebaseConfig.authDomain}`;
+
+  domain = `${environment.firebaseConfig.projectId}.web.app`;
+
   user = new BehaviorSubject<any | null>(null);
 
   constructor(
@@ -21,47 +23,31 @@ export class AuthService {
     private router: Router
   ) {
     auth.authState.subscribe(user => {
-      console.log(user);
       this.user.next(user);
-      this.updatePresence(user);
       if (user) {
+        this.db.database.goOnline();
         localStorage.setItem('uid', user.uid);
-        console.log(`Logged In : ${user.uid}`);
+        // console.log(`Logged In : ${user.uid}`);
+        this.updateUser(user);
       } else {
         localStorage.removeItem('uid');
-        console.log('Logged Out');
+        // console.log('Logged Out');
         this.router.navigate(['login']);
       }
     });
   }
 
-  formatId(id: string): string {
-    let email = `${id}${this.defaultEmailDomain}`;
-    return email;
-  }
+  // formatId(id: string): string {
+  //   let email = `${id}${this.domain}`;
+  //   return email;
+  // }
 
   signUp(id: string, pw: string) {
-    this.auth.createUserWithEmailAndPassword(this.formatId(id), pw)
-      .then((cred) => {
-        console.log('Signed Up');
-        if (cred.user) {
-          this.initUserData(cred.user);
-        }
-      })
-      .catch(err => {
-        console.log('Username Already Exists');
-      });
+    return this.auth.createUserWithEmailAndPassword(`${id}@${this.domain}`, pw);
   }
 
   signIn(id: string, pw: string) {
-    this.auth.signInWithEmailAndPassword(this.formatId(id), pw)
-      .then((cred) => {
-        console.log('Manual Signed In');
-      })
-      .catch(err => {
-        console.log('Username does not Exists, Signing Up');
-        this.signUp(id, pw);
-      });
+    return this.auth.signInWithEmailAndPassword(`${id}@${this.domain}`, pw)
   }
 
   signOut() {
@@ -69,27 +55,22 @@ export class AuthService {
     this.auth.signOut();
   }
 
-  updatePresence(user: any) {
-    if (user) {
-      this.db.database.goOnline();
-      let statusRef = this.db.database.ref(`users/${user.uid}/presence`);
-      statusRef.set({ online: true, ts: Date.now() });
-      statusRef.onDisconnect().set({ online: false, ts: Date.now() });
-    } else {
-      this.db.database.goOffline();
-    }
+  updateUser(user: any) {
+    let userRef = this.db.database.ref(`users/${user.uid}`);
+    userRef.set({ username: user.email.split('@')[0], online: true, ts: Date.now() });
+    userRef.onDisconnect().update({ online: false, ts: Date.now() });
   }
 
-  initUserData(user: any) {
-    this.db.object(`users/${user.uid}`).update({
-      uid: user.uid,
-      username: this.getUsernameFromEmail(user)
-    });
-  }
+  // initUserData(user: any) {
+  //   this.db.object(`users/${user.uid}`).update({
+  //     uid: user.uid,
+  //     username: this.getUsernameFromEmail(user)
+  //   });
+  // }
 
-  getUsernameFromEmail(user:any):string{
-    return user.email.endsWith(this.defaultEmailDomain) ? user.email.split('@')[0] : user.email;
-  }
+  // getUsernameFromEmail(user:any):string{
+  //   return user.email.endsWith(this.defaultEmailDomain) ? user.email.split('@')[0] : user.email;
+  // }
 
   // goOnline(){
   //   this.statusRef.set({ online:true, ts: Date.now() });

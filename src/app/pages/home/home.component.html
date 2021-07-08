@@ -1,7 +1,7 @@
-<div *ngIf="user; else showLoginProgress">
-    <p class="m-2">Welcome ... <a routerLink="/profile">{{user.displayName ? user.displayName : user.username}}</a></p>
-    <app-find-person></app-find-person>
-</div>
-<ng-template #showLoginProgress>
-    <app-spinner status="Signing In ..."></app-spinner>
-</ng-template>
+<main class="my-auto">
+    <div class="text-center py-1">
+        <img src="/assets/images/ad-examples-google.png" alt="Ad" />
+        <img src="/assets/images/ad-examples-shopify.png" alt="Ad" />
+        <p><a routerLink="c">more ads</a></p>
+    </div>
+</main>

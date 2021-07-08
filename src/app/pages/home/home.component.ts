@@ -8,21 +8,13 @@ import { AuthService } from 'src/app/services/auth.service';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
-  user:any;
 
   constructor(
-    public auth: AuthService,
-    private route: ActivatedRoute
-    ) { }
+  ) { }
 
   ngOnInit(): void {
-    this.auth.user.subscribe(user=>{
-      if(user){
-        this.user = user;
-        this.user.username = user.email.split('@')[0];
-      }
-    });
+
   }
-  
+
 
 }

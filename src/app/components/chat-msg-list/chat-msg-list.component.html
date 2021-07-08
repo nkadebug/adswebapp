@@ -1,4 +1,13 @@
-<div *ngFor="let item of items" id="{{item.key}}">
-    <div class="msg">{{item.msg}}</div>
-    <div class="time">{{item.ts | date}}</div>
+<div #scrollMe [scrollTop]="scrollMe.scrollHeight" class="chat">
+    <div *ngFor="let item of items" id="{{item.key}}" class="msg-block" [class]="item.uid == uid ? 'right' : 'left' ">
+        <div>
+            <div class="msg">{{item.msg}}</div>
+            <div class="time">{{item.ts | date:'h:mm a'}}</div>
+        </div>
+    </div>
+    <!-- <div *ngIf="pTyping" class="msg-block left bg-light">
+        <div>
+            <div class="msg">Typing ...</div>
+        </div>
+    </div> -->
 </div>
