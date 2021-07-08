@@ -7,4 +7,13 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'adswebapp';
+  version = '2021.07.08.a';
+  constructor() {
+    console.log(this.version);
+    if (localStorage.appVersion != this.version) {
+      localStorage.clear();
+      sessionStorage.clear();
+      localStorage.appVersion = this.version;
+    }
+  }
 }
